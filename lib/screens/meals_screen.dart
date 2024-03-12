@@ -1,23 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:navigation/models/meal.dart';
+import 'package:navigation/screens/meal_detail_screen.dart';
 import 'package:navigation/widgets/meal_item.dart';
 
 class MealsScreen extends StatelessWidget {
-  final String title;
+  final String? title;
   final List<Meal> meals;
   const MealsScreen({
     Key? key,
-    required this.title,
+    this.title,
     required this.meals,
   }) : super(key: key);
+
+  void mealDetailPage(BuildContext context, Meal meal) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (ctx) => MealDetailScreen(meal: meal),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-      ),
+      appBar: title == null
+          ? null
+          : AppBar(
+              title: Text(title!),
+            ),
       body: meals.isEmpty
           ? Center(
               child: Column(
@@ -44,8 +56,10 @@ class MealsScreen extends StatelessWidget {
           : ListView.builder(
               itemCount: meals.length,
               itemBuilder: (context, index) => MealItem(
-                meal: meals[index],
-              ),
+                  meal: meals[index],
+                  navigateDetailPage: /*mealDetailPage,*/ (meal) {
+                    mealDetailPage(context, meal);
+                  }),
             ),
     );
   }

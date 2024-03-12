@@ -1,13 +1,41 @@
 enum Complexity {
   simple,
   challenging,
-  hard,
+  hard;
+
+  String get getWord {
+    switch (this) {
+      case Complexity.simple:
+        return Complexity.simple.name[0].toUpperCase() +
+            Complexity.simple.name.substring(1);
+      case Complexity.challenging:
+        return Complexity.challenging.name[0].toUpperCase() +
+            Complexity.challenging.name.substring(1);
+      case Complexity.hard:
+        return Complexity.hard.name[0].toUpperCase() +
+            Complexity.hard.name.substring(1);
+    }
+  }
 }
 
 enum Affordability {
   affordable,
   pricey,
-  luxurious,
+  luxurious;
+
+  String get getWord {
+    switch (this) {
+      case Affordability.affordable:
+        return Affordability.affordable.name[0].toUpperCase() +
+            Affordability.affordable.name.substring(1);
+      case Affordability.pricey:
+        return Affordability.pricey.name[0].toUpperCase() +
+            Affordability.pricey.name.substring(1);
+      case Affordability.luxurious:
+        return Affordability.luxurious.name[0].toUpperCase() +
+            Affordability.luxurious.name.substring(1);
+    }
+  }
 }
 
 class Meal {

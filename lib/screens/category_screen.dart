@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:navigation/constants/constants.dart';
+
 import 'package:navigation/data/dummy_data.dart';
 import 'package:navigation/models/category.dart';
 import 'package:navigation/screens/meals_screen.dart';
@@ -24,29 +24,23 @@ class CategoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Select categories'),
+    return GridView(
+      padding: const EdgeInsets.all(8),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        mainAxisSpacing: 20,
+        crossAxisSpacing: 20,
+        childAspectRatio: 3 / 2,
       ),
-      body: GridView(
-        padding: const EdgeInsets.all(8),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          mainAxisSpacing: 20,
-          crossAxisSpacing: 20,
-          childAspectRatio: 3 / 2,
-        ),
-        children: [
-          for (var item in availableCategories)
-            CategoryGrid(
-              category: item,
-              onTap: () {
-                onCategorySelect(context, item);
-              },
-            )
-        ],
-      ),
+      children: [
+        for (var item in availableCategories)
+          CategoryGrid(
+            category: item,
+            onTap: () {
+              onCategorySelect(context, item);
+            },
+          )
+      ],
     );
   }
 }
