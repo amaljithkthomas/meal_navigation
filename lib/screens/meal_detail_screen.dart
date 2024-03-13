@@ -3,9 +3,11 @@ import 'package:navigation/models/meal.dart';
 
 class MealDetailScreen extends StatelessWidget {
   final Meal meal;
+  final void Function(Meal meal) onIconPressed;
   const MealDetailScreen({
     Key? key,
     required this.meal,
+    required this.onIconPressed,
   }) : super(key: key);
 
   @override
@@ -14,6 +16,14 @@ class MealDetailScreen extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           title: Text(meal.title),
+          actions: [
+            IconButton(
+              onPressed: () {
+                onIconPressed(meal);
+              },
+              icon: const Icon(Icons.star),
+            )
+          ],
         ),
         body: SingleChildScrollView(
           child: Column(
