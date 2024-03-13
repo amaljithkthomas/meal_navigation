@@ -8,13 +8,13 @@ import 'package:navigation/widgets/category_grid.dart';
 
 class CategoryScreen extends StatelessWidget {
   final void Function(Meal meal) onFavPressed;
-  const CategoryScreen({
-    Key? key,
-    required this.onFavPressed,
-  }) : super(key: key);
+  final List<Meal> availableMeal;
+  const CategoryScreen(
+      {Key? key, required this.onFavPressed, required this.availableMeal})
+      : super(key: key);
 
   void onCategorySelect(BuildContext context, Category category) {
-    final filteredMeals = dummyMeals
+    final filteredMeals = availableMeal
         .where((element) => element.categories.contains(category.id))
         .toList();
     Navigator.of(context).push(
