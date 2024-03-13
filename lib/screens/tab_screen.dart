@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:navigation/models/meal.dart';
 import 'package:navigation/screens/category_screen.dart';
 import 'package:navigation/screens/meals_screen.dart';
+import 'package:navigation/widgets/main_drawer.dart';
 
 class TabScreen extends StatefulWidget {
   const TabScreen({Key? key}) : super(key: key);
@@ -46,6 +47,7 @@ class _TabScreenState extends State<TabScreen> {
       appBar: AppBar(
         title: Text(selectedIndex == 0 ? 'Categories' : 'Your Favourites'),
       ),
+      drawer: const MainDrawer(),
       body: selectedIndex == 0
           ? CategoryScreen(
               onFavPressed: onFavouritePressed,
