@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:navigation/provider/fav_provider.dart';
 import 'package:navigation/provider/filter_provider.dart';
-import 'package:navigation/provider/meal_provider.dart';
 import 'package:navigation/screens/category_screen.dart';
 import 'package:navigation/screens/filter_Screen.dart';
 import 'package:navigation/screens/meals_screen.dart';
@@ -58,24 +57,27 @@ class _TabScreenState extends ConsumerState<TabScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final meals = ref.watch(mealProvider);
+    //final meals = ref.watch(mealProvider);
     final favMeals = ref.watch(favouriteProvider);
-    final activeFilter = ref.watch(filterProvider);
-    final availableMeal = meals.where((meal) {
-      if (activeFilter[Filter.glutenFree]! && !meal.isGlutenFree) {
-        return false;
-      }
-      if (activeFilter[Filter.lactoseFree]! && !meal.isLactoseFree) {
-        return false;
-      }
-      if (activeFilter[Filter.vegetarian]! && !meal.isVegetarian) {
-        return false;
-      }
-      if (activeFilter[Filter.vegan]! && !meal.isVegan) {
-        return false;
-      }
-      return true;
-    }).toList();
+    //final activeFilter = ref.watch(filterProvider);
+    final availableMeal = ref.watch(filteredProvider);
+
+    //     meals.where((meal) {
+    //   if (activeFilter[Filter.glutenFree]! && !meal.isGlutenFree) {
+    //     return false;
+    //   }
+    //   if (activeFilter[Filter.lactoseFree]! && !meal.isLactoseFree) {
+    //     return false;
+    //   }
+    //   if (activeFilter[Filter.vegetarian]! && !meal.isVegetarian) {
+    //     return false;
+    //   }
+    //   if (activeFilter[Filter.vegan]! && !meal.isVegan) {
+    //     return false;
+    //   }
+    //   return true;
+    // }).toList();
+    //print(availableMeal);
     return Scaffold(
       appBar: AppBar(
         title: Text(selectedIndex == 0 ? 'Categories' : 'Your Favourites'),
