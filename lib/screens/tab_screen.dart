@@ -1,85 +1,77 @@
 import 'package:flutter/material.dart';
-import 'package:navigation/data/dummy_data.dart';
-import 'package:navigation/models/meal.dart';
+import 'package:navigation/provider/fav_provider.dart';
+import 'package:navigation/provider/filter_provider.dart';
+import 'package:navigation/provider/meal_provider.dart';
 import 'package:navigation/screens/category_screen.dart';
 import 'package:navigation/screens/filter_Screen.dart';
 import 'package:navigation/screens/meals_screen.dart';
 import 'package:navigation/widgets/main_drawer.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-const kInitialFiler = {
-  Filter.glutenFree: false,
-  Filter.lactoseFree: false,
-  Filter.vegetarian: false,
-  Filter.vegan: false,
-};
+// const kInitialFiler = {
+//   Filter.glutenFree: false,
+//   Filter.lactoseFree: false,
+//   Filter.vegetarian: false,
+//   Filter.vegan: false,
+// };
 
-class TabScreen extends StatefulWidget {
+class TabScreen extends ConsumerStatefulWidget {
   const TabScreen({Key? key}) : super(key: key);
 
   @override
-  State<TabScreen> createState() => _TabScreenState();
+  ConsumerState<TabScreen> createState() => _TabScreenState();
 }
 
-class _TabScreenState extends State<TabScreen> {
+class _TabScreenState extends ConsumerState<TabScreen> {
   int selectedIndex = 0;
-  final List<Meal> favMeals = [];
-  Map<Filter, bool> selectedFilter = kInitialFiler;
+  //final List<Meal> favMeals = [];
+
   void onTabChanged(index) {
     setState(() {
       selectedIndex = index;
     });
   }
 
-  void showIndication(String message) {
-    ScaffoldMessenger.of(context).clearSnackBars();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-      ),
-    );
-  }
-
-  void onFavouritePressed(Meal meal) {
-    final isExisting = favMeals.contains(meal);
-    if (isExisting) {
-      favMeals.remove(meal);
-      showIndication('Favourite no longer available');
-    } else {
-      favMeals.add(meal);
-      showIndication('Meal added to Favourite');
-    }
-    setState(() {});
-  }
+  //
+  // void onFavouritePressed(Meal meal) {
+  //   final isExisting = favMeals.contains(meal);
+  //   if (isExisting) {
+  //     favMeals.remove(meal);
+  //     showIndication('Favourite no longer available');
+  //   } else {
+  //     favMeals.add(meal);
+  //     showIndication('Meal added to Favourite');
+  //   }
+  //   setState(() {});
+  // }
 
   void onScreenSelect(String identifier) async {
     Navigator.pop(context);
     if (identifier == 'filter') {
-      final result = await Navigator.of(context).push<Map<Filter, bool>>(
+      await Navigator.of(context).push<Map<Filter, bool>>(
         MaterialPageRoute(
-          builder: (ctx) => FilterScreen(
-            selectedFilter: selectedFilter,
-          ),
+          builder: (ctx) => const FilterScreen(),
         ),
       );
-      setState(() {
-        selectedFilter = result ?? kInitialFiler;
-      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final availableMeal = dummyMeals.where((meal) {
-      if (selectedFilter[Filter.glutenFree]! && !meal.isGlutenFree) {
+    final meals = ref.watch(mealProvider);
+    final favMeals = ref.watch(favouriteProvider);
+    final activeFilter = ref.watch(filterProvider);
+    final availableMeal = meals.where((meal) {
+      if (activeFilter[Filter.glutenFree]! && !meal.isGlutenFree) {
         return false;
       }
-      if (selectedFilter[Filter.lactoseFree]! && !meal.isLactoseFree) {
+      if (activeFilter[Filter.lactoseFree]! && !meal.isLactoseFree) {
         return false;
       }
-      if (selectedFilter[Filter.vegetarian]! && !meal.isVegetarian) {
+      if (activeFilter[Filter.vegetarian]! && !meal.isVegetarian) {
         return false;
       }
-      if (selectedFilter[Filter.vegan]! && !meal.isVegan) {
+      if (activeFilter[Filter.vegan]! && !meal.isVegan) {
         return false;
       }
       return true;
@@ -93,12 +85,10 @@ class _TabScreenState extends State<TabScreen> {
       ),
       body: selectedIndex == 0
           ? CategoryScreen(
-              onFavPressed: onFavouritePressed,
               availableMeal: availableMeal,
             )
           : MealsScreen(
               meals: favMeals,
-              onFavouritePressed: onFavouritePressed,
             ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: selectedIndex,
